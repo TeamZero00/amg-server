@@ -65,7 +65,7 @@ export class Signer {
       this.gameContract,
       list_msg
     );
-    const baseGasLimit = betting_list * 1500 + 200000;
+    const baseGasLimit = betting_list.length * 1500 + 200000;
     const baseGasAmount = 500;
     const gasLimit = betting_list.length * 15000 + baseGasLimit;
     const gasAmount = betting_list.length * 30 + baseGasAmount;
@@ -115,8 +115,14 @@ export class Signer {
       };
     } catch (err) {
       await sleep(5000);
-      console.log("setting error");
-      console.log(err);
+      console.log("setting error\n", err);
+
+      return {
+        height: 0,
+        transactionHash: "",
+        winners: [],
+        roundPrice: 0,
+      };
     }
   }
 

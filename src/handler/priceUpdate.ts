@@ -18,6 +18,7 @@ export const PriceUpdate = async () => {
   try {
     const { owner, owner2 } = await getOwner();
     const { price, symbol, date, timestamp, onTime } = await getUSDprice();
+
     let height: number, transactionHash: string;
     let winners: Array<any>;
     let roundPrice: number;
@@ -26,6 +27,7 @@ export const PriceUpdate = async () => {
         ({ height, transactionHash, winners, roundPrice } = await owner.setting(
           price
         ));
+
         who = false;
         break;
       case false:
@@ -36,7 +38,10 @@ export const PriceUpdate = async () => {
       default:
         break;
     }
-
+    if (!height || !transactionHash || roundPrice) {
+      console.log("setting fail");
+      return;
+    }
     const priceData = new Price();
     priceData.symbol = symbol;
     priceData.timestamp = timestamp;

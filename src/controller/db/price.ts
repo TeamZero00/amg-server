@@ -39,67 +39,71 @@ export class PriceController {
   }
 
   async get24HourPrice(): Promise<SocketSendPrice> {
-    const now = new Date().getTime();
-    const nowTimestamp = Math.floor(now / 5000) * 5000;
-    const twentyFourHoursAgo = new Date(
-      nowTimestamp - 24 * 60 * 60 * 1000
-    ).getTime();
-    if (high && low) {
-      const highPrice = await this.priceRepository
-        .createQueryBuilder("price")
-        .where("price.timestamp BETWEEN :start AND :end", {
-          start: twentyFourHoursAgo,
-          end: nowTimestamp,
-        })
-        .orderBy("price.price", "DESC")
-        .getOne();
-      high = Number(highPrice.price);
-      const lowPrice = await this.priceRepository
-        .createQueryBuilder("price")
-        .where("price.timestamp BETWEEN :start AND :end", {
-          start: twentyFourHoursAgo,
-          end: nowTimestamp,
-        })
-        .orderBy("price.price", "ASC")
-        .getOne();
-      low = Number(lowPrice.price);
-    }
+    try {
+      const now = new Date().getTime();
+      const nowTimestamp = Math.floor(now / 5000) * 5000;
+      const twentyFourHoursAgo = new Date(
+        nowTimestamp - 24 * 60 * 60 * 1000
+      ).getTime();
+      if (high && low) {
+        const highPrice = await this.priceRepository
+          .createQueryBuilder("price")
+          .where("price.timestamp BETWEEN :start AND :end", {
+            start: twentyFourHoursAgo,
+            end: nowTimestamp,
+          })
+          .orderBy("price.price", "DESC")
+          .getOne();
+        high = Number(highPrice.price);
+        const lowPrice = await this.priceRepository
+          .createQueryBuilder("price")
+          .where("price.timestamp BETWEEN :start AND :end", {
+            start: twentyFourHoursAgo,
+            end: nowTimestamp,
+          })
+          .orderBy("price.price", "ASC")
+          .getOne();
+        low = Number(lowPrice.price);
+      }
 
-    const nowPrice = Number((await this.latestPrice()).price);
+      const nowPrice = Number((await this.latestPrice()).price);
 
-    //현재 가격이 high 보다 높으면 바꿈
-    if (nowPrice > high) {
-      high = nowPrice;
-    }
+      //현재 가격이 high 보다 높으면 바꿈
+      if (nowPrice > high) {
+        high = nowPrice;
+      }
 
-    //현재 가격이 low 보다 낮으면 바꿈
-    if (nowPrice < low) {
-      low = nowPrice;
-    }
+      //현재 가격이 low 보다 낮으면 바꿈
+      if (nowPrice < low) {
+        low = nowPrice;
+      }
 
-    const befor24HourPrice = await this.priceRepository.findOne({
-      where: { timestamp: twentyFourHoursAgo },
-    });
-
-    if (!befor24HourPrice) {
-      const firstPrice = await this.priceRepository.findOne({
-        where: { id: 1 },
+      const befor24HourPrice = await this.priceRepository.findOne({
+        where: { timestamp: twentyFourHoursAgo },
       });
 
+      if (!befor24HourPrice) {
+        const firstPrice = await this.priceRepository.findOne({
+          where: { id: 1 },
+        });
+
+        return {
+          befor24HourPrice: firstPrice?.price,
+          nowPrice: nowPrice.toString(),
+          highPrice: high.toString(),
+          lowPrice: low.toString(),
+        };
+      }
+
       return {
-        befor24HourPrice: firstPrice?.price,
         nowPrice: nowPrice.toString(),
         highPrice: high.toString(),
         lowPrice: low.toString(),
+        befor24HourPrice: befor24HourPrice?.price,
       };
+    } catch (err) {
+      console.log("Send Price Error\n", err);
     }
-
-    return {
-      nowPrice: nowPrice.toString(),
-      highPrice: high.toString(),
-      lowPrice: low.toString(),
-      befor24HourPrice: befor24HourPrice.price,
-    };
   }
 
   async save(price: Price) {

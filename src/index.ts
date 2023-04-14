@@ -17,7 +17,7 @@ AppDataSource.initialize()
   .then(async () => {
     // create express app
     const app = express();
-    const port = 4000;
+    const port = 3000;
 
     app.use(bodyParser.json());
     app.use(bodyParser.json());

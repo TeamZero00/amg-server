@@ -38,10 +38,7 @@ export const PriceUpdate = async () => {
       default:
         break;
     }
-    if (!height || !transactionHash || !roundPrice) {
-      console.log("setting fail");
-      return;
-    }
+
     const priceData = new Price();
     priceData.symbol = symbol;
     priceData.timestamp = timestamp;

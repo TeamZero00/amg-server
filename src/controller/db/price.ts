@@ -74,7 +74,7 @@ export class PriceController {
       }
 
       //현재 가격이 low 보다 낮으면 바꿈
-      if (nowPrice && Number(nowPrice.price) < low) {
+      if (nowPrice && Number(nowPrice.price) > low) {
         low = Number(nowPrice.price);
       }
 

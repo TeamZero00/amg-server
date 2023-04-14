@@ -20,10 +20,6 @@ export const DBConfig = {
   database: process.env.DATA_BASE,
 };
 
-export const FixerConfig = {
-  apiKey: process.env.API_KEY,
-};
-
 export const PolyGonConfig = {
   apiKey: process.env.API_KEY,
 };

@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM
+# Archway Hackathon Project
 
 Steps to run this project:
 

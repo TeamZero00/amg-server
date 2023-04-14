@@ -66,16 +66,16 @@ export class PriceController {
         low = Number(lowPrice.price);
       }
 
-      const nowPrice = Number((await this.latestPrice()).price);
-
+      const nowPrice = await this.latestPrice();
       //현재 가격이 high 보다 높으면 바꿈
-      if (nowPrice > high) {
-        high = nowPrice;
+
+      if (Number(nowPrice.price) > high) {
+        high = Number(nowPrice.price);
       }
 
       //현재 가격이 low 보다 낮으면 바꿈
-      if (nowPrice < low) {
-        low = nowPrice;
+      if (Number(nowPrice.price) < low) {
+        low = Number(nowPrice.price);
       }
 
       const befor24HourPrice = await this.priceRepository.findOne({
@@ -89,20 +89,20 @@ export class PriceController {
 
         return {
           befor24HourPrice: firstPrice?.price,
-          nowPrice: nowPrice.toString(),
+          nowPrice: nowPrice?.price,
           highPrice: high.toString(),
           lowPrice: low.toString(),
         };
       }
 
       return {
-        nowPrice: nowPrice.toString(),
+        nowPrice: nowPrice.price,
         highPrice: high.toString(),
         lowPrice: low.toString(),
-        befor24HourPrice: befor24HourPrice?.price,
+        befor24HourPrice: befor24HourPrice.price,
       };
     } catch (err) {
-      console.log("Send Price Error\n", err);
+      console.log("Get24Hour Price Error \n", err);
     }
   }
 

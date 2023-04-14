@@ -69,12 +69,12 @@ export class PriceController {
       const nowPrice = await this.latestPrice();
       //현재 가격이 high 보다 높으면 바꿈
 
-      if (Number(nowPrice.price) > high) {
+      if (nowPrice && Number(nowPrice.price) > high) {
         high = Number(nowPrice.price);
       }
 
       //현재 가격이 low 보다 낮으면 바꿈
-      if (Number(nowPrice.price) < low) {
+      if (nowPrice && Number(nowPrice.price) < low) {
         low = Number(nowPrice.price);
       }
 

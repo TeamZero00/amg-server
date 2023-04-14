@@ -5,7 +5,7 @@ import { BettingController } from "../controller/db/betting";
 import { sendToAll } from "./server";
 import { getClient } from "../archway/client";
 import { PriceController } from "../controller/db/price";
-
+import _ from "lodash";
 const method = {
   jsonrpc: "2.0",
   method: "subscribe",
@@ -51,7 +51,8 @@ const sendBettingList = async () => {
   const bettingController = new BettingController();
   try {
     const newBettingLIst = await bettingController.recentBettingList();
-    if (JSON.stringify(bettingList) !== JSON.stringify(newBettingLIst)) {
+
+    if (!_.isEqual(bettingList, newBettingLIst)) {
       bettingList = newBettingLIst;
       const sendBettingList = newBettingLIst.map((betting) => {
         delete betting.id;

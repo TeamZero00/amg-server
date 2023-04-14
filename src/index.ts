@@ -27,7 +27,9 @@ AppDataSource.initialize()
     app.use(helmet());
     app.use(morgan("dev"));
     app.use(cookieParser());
-    app.use("/", (req: Request, res: Response) => {});
+    app.use("/", (req: Request, res: Response) => {
+      res.send("hello");
+    });
 
     app.use("/bet_history/:address", async (req: Request, res: Response) => {
       const address = req.params.address;

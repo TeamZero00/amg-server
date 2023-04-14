@@ -51,7 +51,7 @@ const sendBettingList = async () => {
   const bettingController = new BettingController();
   try {
     const newBettingLIst = await bettingController.recentBettingList();
-    if (bettingList.toString() !== newBettingLIst.toString()) {
+    if (JSON.stringify(bettingList) !== JSON.stringify(newBettingLIst)) {
       bettingList = newBettingLIst;
       const sendBettingList = newBettingLIst.map((betting) => {
         delete betting.id;

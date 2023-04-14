@@ -45,6 +45,7 @@ export class PriceController {
       const twentyFourHoursAgo = new Date(
         nowTimestamp - 24 * 60 * 60 * 1000
       ).getTime();
+      const nowPrice = await this.latestPrice();
       if (high || low) {
         const highPrice = await this.priceRepository
           .createQueryBuilder("price")
@@ -66,7 +67,6 @@ export class PriceController {
         low = Number(lowPrice.price);
       }
 
-      const nowPrice = await this.latestPrice();
       //현재 가격이 high 보다 높으면 바꿈
 
       if (nowPrice && Number(nowPrice.price) > high) {

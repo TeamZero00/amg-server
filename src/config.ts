@@ -16,7 +16,7 @@ export const DBConfig = {
   host: process.env.HOST,
   port: process.env.PORT,
   username: process.env.USER_NAME,
-  password: process.env.PASSWROD,
+  password: process.env.PASSWORD,
   database: process.env.DATA_BASE,
 };
 

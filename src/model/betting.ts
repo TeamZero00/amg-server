@@ -28,7 +28,7 @@ export class Betting {
   basePrice: number;
 
   @Column()
-  startHiehgt: number;
+  startHeight: number;
 
   @Column()
   targetHeight: number;

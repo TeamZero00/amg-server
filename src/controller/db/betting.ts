@@ -15,7 +15,7 @@ export class BettingController {
     targetHeight: number,
     winners: Winner[],
     roundPrice: number
-  ) {
+  ): Promise<void> {
     for (const winner of winners) {
       try {
         const betting = await this.bettingRepository.findOne({
@@ -38,7 +38,7 @@ export class BettingController {
       }
     }
   }
-  async updateLose(height: number, roundPrice: number) {
+  async updateLose(height: number, roundPrice: number): Promise<void> {
     try {
       await this.bettingRepository.update(
         {
@@ -56,7 +56,7 @@ export class BettingController {
     }
   }
 
-  async NowBettingGame() {
+  async NowBettingGame(): Promise<Betting[]> {
     try {
       const nowBetting = await this.bettingRepository.find({
         where: { status: Status.Pending },
@@ -69,7 +69,21 @@ export class BettingController {
     }
   }
 
-  async UserBettingList(address: string) {
+  async recentBettingList(): Promise<Betting[]> {
+    try {
+      const recentBettingList = await this.bettingRepository
+        .createQueryBuilder("betting")
+        .orderBy("id", "DESC")
+        .limit(100)
+        .getMany();
+      return recentBettingList;
+    } catch (err) {
+      console.log("recent betting list GET error");
+      console.log(err);
+    }
+  }
+
+  async UserBettingList(address: string): Promise<Betting> {
     try {
       const betting = await this.bettingRepository.findOne({
         where: {

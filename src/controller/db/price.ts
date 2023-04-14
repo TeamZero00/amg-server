@@ -13,8 +13,8 @@ interface savePrice {
   onTime: boolean;
 }
 
-let high = 0;
-let low = 0;
+let high: number = 0;
+let low: number = 0;
 export class PriceController {
   private priceRepository = AppDataSource.getRepository(Price);
 
@@ -65,19 +65,22 @@ export class PriceController {
       low = Number(lowPrice.price);
     }
 
-    const nowPrice = await this.latestPrice();
+    const nowPrice = Number((await this.latestPrice()).price);
 
-    if (Number(nowPrice.price) > high) {
-      high = Number(nowPrice.price);
+    //현재 가격이 high 보다 높으면 바꿈
+    if (nowPrice > high) {
+      high = nowPrice;
     }
 
-    if (Number(nowPrice.price) < low) {
-      low = Number(nowPrice.price);
+    //현재 가격이 low 보다 낮으면 바꿈
+    if (nowPrice < low) {
+      low = nowPrice;
     }
 
     const befor24HourPrice = await this.priceRepository.findOne({
       where: { timestamp: twentyFourHoursAgo },
     });
+
     if (!befor24HourPrice) {
       const firstPrice = await this.priceRepository.findOne({
         where: { id: 1 },
@@ -85,14 +88,14 @@ export class PriceController {
 
       return {
         befor24HourPrice: firstPrice?.price,
-        nowPrice: nowPrice?.price,
+        nowPrice: nowPrice.toString(),
         highPrice: high.toString(),
         lowPrice: low.toString(),
       };
     }
 
     return {
-      nowPrice: nowPrice.price,
+      nowPrice: nowPrice.toString(),
       highPrice: high.toString(),
       lowPrice: low.toString(),
       befor24HourPrice: befor24HourPrice.price,

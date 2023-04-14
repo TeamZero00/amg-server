@@ -7,14 +7,12 @@ import { Price } from "./model/price";
 import { Account } from "./model/account";
 import { Betting } from "./model/betting";
 
-// import { User } from "./model/User";
-
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: DBConfig.host,
   port: Number(DBConfig.port),
   username: DBConfig.username,
-  password: DBConfig.password.toString(),
+  password: DBConfig.password,
   database: DBConfig.database,
   synchronize: true,
   logging: false,

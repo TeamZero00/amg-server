@@ -65,10 +65,10 @@ export class Signer {
       this.gameContract,
       list_msg
     );
-    const baseGasLimit = 400000;
-    const basGasAmount = 600;
+    const baseGasLimit = betting_list * 1500 + 200000;
+    const baseGasAmount = 500;
     const gasLimit = betting_list.length * 15000 + baseGasLimit;
-    const gasAmount = betting_list.length * 30 + basGasAmount;
+    const gasAmount = betting_list.length * 30 + baseGasAmount;
     const fee = {
       amount: [
         {

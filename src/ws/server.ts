@@ -20,7 +20,7 @@ wss.on("connection", async (ws) => {
     method: "init",
     data: {
       chart: await chartController.recent(),
-      nowGame: await bettingController.NowBettingGame(),
+      game: await bettingController.recentBettingList(),
       poolBalance: (await client.getBankPool()).balance,
     },
   };

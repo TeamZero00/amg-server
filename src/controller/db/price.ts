@@ -45,7 +45,7 @@ export class PriceController {
       const twentyFourHoursAgo = new Date(
         nowTimestamp - 24 * 60 * 60 * 1000
       ).getTime();
-      if (high && low) {
+      if (high || low) {
         const highPrice = await this.priceRepository
           .createQueryBuilder("price")
           .where("price.timestamp BETWEEN :start AND :end", {
@@ -96,10 +96,10 @@ export class PriceController {
       }
 
       return {
+        befor24HourPrice: befor24HourPrice.price,
         nowPrice: nowPrice.price,
         highPrice: high.toString(),
         lowPrice: low.toString(),
-        befor24HourPrice: befor24HourPrice.price,
       };
     } catch (err) {
       console.log("Get24Hour Price Error \n", err);

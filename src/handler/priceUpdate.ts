@@ -9,8 +9,7 @@ import { Price } from "../model/price";
 import { BettingController } from "../controller/db/betting";
 import { sendToAll } from "../ws/server";
 
-let who = true;
-export const PriceUpdate = async () => {
+export const PriceUpdate = async (who: boolean) => {
   const priceController = new PriceController();
   const chartController = new ChartController();
   const bettingController = new BettingController();

@@ -18,7 +18,7 @@ const method = {
 const ws = new ReconnectingSocket(
   "wss://rpc.constantine-2.archway.tech/websocket"
 );
-
+let who = true;
 export default async function ArchwaySocket() {
   try {
     console.log("Socket Start");
@@ -26,11 +26,12 @@ export default async function ArchwaySocket() {
     ws.queueRequest(JSON.stringify(method));
     ws.events.subscribe({
       next: async (data) => {
-        await PriceUpdate();
+        await PriceUpdate(who);
         await BettingUpdate();
         sendPrice();
         sendPool();
         sendBettingList();
+        who = !who;
       },
       error: (err) => {
         console.log("disconnect");

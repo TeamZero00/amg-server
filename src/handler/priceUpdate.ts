@@ -38,7 +38,7 @@ export const PriceUpdate = async () => {
       default:
         break;
     }
-    if (!height || !transactionHash || roundPrice) {
+    if (!height || !transactionHash || !roundPrice) {
       console.log("setting fail");
       return;
     }

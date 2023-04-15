@@ -37,7 +37,9 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
-
+    console.log("timestamp", timestamp);
+    console.log("height", height);
+    console.log("price", roundPrice);
     const priceData = new Price();
     priceData.symbol = symbol;
     priceData.timestamp = timestamp;

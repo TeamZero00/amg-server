@@ -3,6 +3,7 @@ import { AppDataSource } from "../../data-source";
 import { Betting, Status } from "../../model/betting";
 import { Winner } from "../../archway/signer";
 import { AccountController } from "./account";
+import { Account } from "../../model/account";
 
 export class BettingController {
   private bettingRepository = AppDataSource.getRepository(Betting);
@@ -69,14 +70,22 @@ export class BettingController {
     }
   }
 
-  async recentBettingList(): Promise<Betting[]> {
+  async recentBettingList() {
     try {
       const recentBettingList = await this.bettingRepository
         .createQueryBuilder("betting")
-        .orderBy("id", "DESC")
+        .leftJoinAndSelect("betting.account", "account")
+        .orderBy("betting.id", "DESC")
         .limit(100)
         .getMany();
-      return recentBettingList;
+
+      return recentBettingList.map((betting) => {
+        const address = betting.account.address;
+        return {
+          ...betting,
+          account: address,
+        };
+      });
     } catch (err) {
       console.log("recent betting list GET error");
       console.log(err);

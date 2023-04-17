@@ -93,14 +93,24 @@ export class BettingController {
     }
   }
 
-  async UserBettingList(address: string): Promise<Betting> {
+  async UserBettingList(address: string) {
     try {
-      const betting = await this.bettingRepository.findOne({
-        where: {
-          account: { address },
-        },
+      // const betting = await this.bettingRepository.find({
+      //   where: {
+      //     account: { address },
+      //   },
+      // });
+      const BettingList = await this.bettingRepository
+        .createQueryBuilder("betting")
+        .leftJoinAndSelect("betting.account", address)
+        .getMany();
+      console.log(BettingList);
+      return BettingList.map((betting) => {
+        return {
+          ...betting,
+          account: address,
+        };
       });
-      return betting;
     } catch (err) {
       console.log(err);
       return undefined;

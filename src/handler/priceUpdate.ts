@@ -65,7 +65,7 @@ export const PriceUpdate = async (who: boolean) => {
       sendToAll(response);
     }
     await bettingController.updateWinner(height, winners, roundPrice);
-    bettingController.updateLose(height, roundPrice);
+    await bettingController.updateLose(height, roundPrice);
   } catch (err) {
     console.log(err);
   }

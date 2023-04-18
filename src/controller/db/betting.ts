@@ -29,7 +29,7 @@ export class BettingController {
         betting.status = Status.Win;
         betting.winAmount = Number(winner.amount);
         betting.roundPrice = roundPrice;
-        this.bettingRepository.save(betting);
+        await this.bettingRepository.save(betting);
         await this.accountController.updateWinAmount(
           winner.address,
           Number(winner.amount)
@@ -43,7 +43,7 @@ export class BettingController {
     try {
       await this.bettingRepository.update(
         {
-          targetHeight: LessThan(height),
+          targetHeight: height,
           status: Status.Pending,
         },
         {
@@ -104,7 +104,6 @@ export class BettingController {
         .createQueryBuilder("betting")
         .leftJoinAndSelect("betting.account", address)
         .getMany();
-      console.log(BettingList);
       return BettingList.map((betting) => {
         return {
           ...betting,

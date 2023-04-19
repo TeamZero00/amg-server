@@ -28,9 +28,9 @@ export default async function ArchwaySocket() {
       next: async (data) => {
         await PriceUpdate(who);
         await BettingUpdate();
-        sendPrice();
-        sendPool();
-        sendBettingList();
+        await sendPrice();
+        await sendPool();
+        await sendBettingList();
         who = !who;
       },
       error: (err) => {

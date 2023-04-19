@@ -27,7 +27,6 @@ export class BettingController {
           },
         });
         betting.status = Status.Win;
-        betting.winAmount = Number(winner.amount);
         betting.roundPrice = roundPrice;
         await this.bettingRepository.save(betting);
         await this.accountController.updateWinAmount(

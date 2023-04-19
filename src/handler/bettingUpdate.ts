@@ -20,6 +20,7 @@ export const BettingUpdate = async () => {
       await client.getHeightBettingList(height + 50),
     ];
     const bettingLists = (await Promise.all(promises)).flat();
+    console.log(bettingLists);
     // const sendBettingList = [];
     for (const betting of bettingLists) {
       const {
@@ -29,6 +30,7 @@ export const BettingUpdate = async () => {
         base_price,
         start_height,
         target_height,
+        win_amount,
       } = betting;
 
       let account = await accountController.findAccount(address);
@@ -49,8 +51,8 @@ export const BettingUpdate = async () => {
       bet.basePrice = Number(base_price) / 100000;
       bet.startHeight = start_height;
       bet.targetHeight = target_height;
-
-      bettingController.create(bet);
+      bet.winAmount = Number(win_amount);
+      await bettingController.create(bet);
     }
   } catch (err) {
     console.log("Betting Update Error");

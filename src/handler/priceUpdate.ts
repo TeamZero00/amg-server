@@ -49,6 +49,9 @@ export const PriceUpdate = async (who: boolean) => {
     priceData.onTime = onTime;
     await priceController.save(priceData);
 
+    console.log("winners", winners);
+    await bettingController.updateWinner(height, winners, roundPrice);
+    await bettingController.updateLose(height, roundPrice);
     if (onTime) {
       const recentPrices = await priceController.getRecentPrices();
       const newChart = await chartController.makeChartByPrice(
@@ -64,8 +67,6 @@ export const PriceUpdate = async (who: boolean) => {
       console.log("Send To All", response);
       sendToAll(response);
     }
-    await bettingController.updateWinner(height, winners, roundPrice);
-    await bettingController.updateLose(height, roundPrice);
   } catch (err) {
     console.log(err);
   }

@@ -10,6 +10,7 @@ type Betting = {
   base_price: string;
   start_height: number;
   target_height: number;
+  win_amount: string;
 };
 export async function getClient() {
   const queryer = await ArchwayClient.connect(network.endpoint);

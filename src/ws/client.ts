@@ -95,8 +95,9 @@ const sendPrice = async () => {
   try {
     const priceController = new PriceController();
     const prices = await priceController.get24HourPrice();
-
-    sendToAll({ method: "price_update", data: prices });
+    const client = await getClient();
+    const height = await client.getHeight();
+    sendToAll({ method: "price_update", data: { prices, height } });
   } catch (err) {
     console.log("sendPirce Error");
     console.log(err);

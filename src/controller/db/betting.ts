@@ -101,7 +101,8 @@ export class BettingController {
       // });
       const BettingList = await this.bettingRepository
         .createQueryBuilder("betting")
-        .leftJoinAndSelect("betting.account", address)
+        .leftJoinAndSelect("betting.account.address", "account")
+        .where("account.address = :address", { address })
         .getMany();
       return BettingList.map((betting) => {
         return {

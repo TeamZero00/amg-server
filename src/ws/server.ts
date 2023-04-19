@@ -2,7 +2,7 @@ import WebSocket from "ws";
 import { ChartController } from "../controller/db/chart";
 import { BettingController } from "../controller/db/betting";
 import { getClient } from "../archway/client";
-import { PriceController, PriceController } from "../controller/db/price";
+import { PriceController } from "../controller/db/price";
 interface sendData {
   method: string;
   data: Object;

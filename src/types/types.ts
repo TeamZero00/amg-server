@@ -6,7 +6,7 @@ export type Pool = {
 };
 
 export type SocketSendPrice = {
-  befor24HourPrice: string;
+  before24HourPrice: string;
   nowPrice: string;
   highPrice: string;
   lowPrice: string;

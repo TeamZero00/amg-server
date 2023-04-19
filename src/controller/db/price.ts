@@ -88,7 +88,7 @@ export class PriceController {
         });
 
         return {
-          befor24HourPrice: firstPrice?.price,
+          before24HourPrice: firstPrice?.price,
           nowPrice: nowPrice?.price,
           highPrice: high.toString(),
           lowPrice: low.toString(),
@@ -96,7 +96,7 @@ export class PriceController {
       }
 
       return {
-        befor24HourPrice: befor24HourPrice.price,
+        before24HourPrice: befor24HourPrice.price,
         nowPrice: nowPrice.price,
         highPrice: high.toString(),
         lowPrice: low.toString(),

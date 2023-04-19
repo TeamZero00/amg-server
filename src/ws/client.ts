@@ -63,11 +63,7 @@ const sendBettingList = async () => {
     }
     if (!isEqual) {
       bettingList = newBettingLIst;
-      const sendBettingList = newBettingLIst.map((betting) => {
-        delete betting.id;
-        return betting;
-      });
-      sendToAll({ method: "betting_update", data: sendBettingList });
+      sendToAll({ method: "betting_update", data: newBettingLIst });
     }
   } catch (err) {
     console.log("sendBetting Error");

@@ -80,7 +80,6 @@ export class BettingController {
 
       return recentBettingList.map((betting) => {
         const address = betting.account.address;
-        delete betting.id;
         return {
           ...betting,
           account: address,

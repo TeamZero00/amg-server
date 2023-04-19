@@ -37,7 +37,7 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
-
+    console.log(winners);
     if (winners.length >= 1) {
       sendToAll({
         method: "new_winners",

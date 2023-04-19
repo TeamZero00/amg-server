@@ -2,6 +2,7 @@ import WebSocket from "ws";
 import { ChartController } from "../controller/db/chart";
 import { BettingController } from "../controller/db/betting";
 import { getClient } from "../archway/client";
+import { PriceController, PriceController } from "../controller/db/price";
 interface sendData {
   method: string;
   data: Object;
@@ -13,6 +14,7 @@ const wss = new WebSocket.Server({
 
 const chartController = new ChartController();
 const bettingController = new BettingController();
+const priceController = new PriceController();
 wss.on("connection", async (ws) => {
   console.log("client connected");
   const client = await getClient();
@@ -22,6 +24,7 @@ wss.on("connection", async (ws) => {
       chart: await chartController.recent(),
       game: await bettingController.recentBettingList(),
       poolBalance: (await client.getBankPool()).balance,
+      price: await priceController.get24HourPrice(),
     },
   };
   ws.send(JSON.stringify(sendData));

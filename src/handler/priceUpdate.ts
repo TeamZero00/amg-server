@@ -37,6 +37,17 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
+
+    if (winners.length >= 1) {
+      sendToAll({
+        method: "new_winners",
+        data: {
+          winners,
+          height,
+        },
+      });
+    }
+
     console.log("timestamp", timestamp);
     console.log("height", height);
     console.log("price", roundPrice);

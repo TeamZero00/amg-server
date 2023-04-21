@@ -10,7 +10,7 @@ export class Chart {
   @Column({ type: "bigint" })
   timestamp: number;
 
-  @Column({ type: "string" })
+  @Column()
   date: string;
 
   @Column()

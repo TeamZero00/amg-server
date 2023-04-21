@@ -15,7 +15,6 @@ const bettingController = new BettingController();
 
 let high = 0;
 let low = 2;
-let open = 0;
 
 export const PriceUpdate = async (who: boolean) => {
   try {
@@ -42,14 +41,14 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
-
+    const { id, open } = await chartController.lastidAndClose();
     const chart = new Chart();
-    chart.id = (await chartController.lastid()) + 1;
+    chart.id = id + 1;
     chart.symbol = symbol;
     chart.timestamp = timestamp;
 
     chart.date = date;
-    chart.open = open.toString();
+    chart.open = open;
     chart.high = high.toString();
     chart.low = low.toString();
     if (parseFloat(price) > high) {
@@ -105,7 +104,6 @@ export const PriceUpdate = async (who: boolean) => {
       await chartController.save(chart);
       high = 0;
       low = 2;
-      open = Number(chart.close);
     }
   } catch (err) {
     console.log(err);

@@ -36,7 +36,7 @@ export class ChartController {
     chart.close = close;
     chart.high = high;
     chart.low = low;
-    chart.date = new Date(date);
+    chart.date = date;
     chart.timestamp = timestamp;
 
     // await this.chartRepository.save(newChart);

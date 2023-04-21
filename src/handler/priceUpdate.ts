@@ -46,7 +46,7 @@ export const PriceUpdate = async (who: boolean) => {
     chart.symbol = symbol;
     chart.timestamp = timestamp;
 
-    chart.date = new Date(date);
+    chart.date = date;
     chart.open = open.toString();
     chart.high = high.toString();
     chart.low = low.toString();
@@ -62,10 +62,7 @@ export const PriceUpdate = async (who: boolean) => {
     chart.close = price;
     sendToAll({
       method: "new_chart",
-      data: {
-        chart,
-        price,
-      },
+      data: chart,
     });
     console.log(winners);
 
@@ -75,10 +72,7 @@ export const PriceUpdate = async (who: boolean) => {
 
     const sendData = {
       method: "new_chart",
-      data: {
-        chart,
-        price,
-      },
+      data: chart,
     };
     console.log(sendData);
     sendToAll(sendData);

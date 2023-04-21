@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  OneToOne,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class Chart {
@@ -16,8 +10,8 @@ export class Chart {
   @Column({ type: "bigint" })
   timestamp: number;
 
-  @Column({ type: "date", default: () => "CURRENT_DATE" })
-  date: Date;
+  @Column({ type: "string" })
+  date: string;
 
   @Column()
   high: string;

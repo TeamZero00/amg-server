@@ -67,7 +67,6 @@ export class BettingController {
     }
   }
 
-  async NotGameAcount(): number {}
   async recentBettingList() {
     try {
       const recentBettingList = await this.bettingRepository

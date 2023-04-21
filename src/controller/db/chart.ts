@@ -11,6 +11,14 @@ export class ChartController {
       .getOne();
     return recentChart;
   }
+
+  async lastid() {
+    const recentChart = await this.chartRepository
+      .createQueryBuilder("chart")
+      .orderBy("id", "DESC")
+      .getOne();
+    return recentChart.id;
+  }
   async recentCharts(): Promise<Chart[]> {
     //3시간 동안의 차트
     const recentChart = await this.chartRepository

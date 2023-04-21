@@ -12,6 +12,7 @@ import { Chart } from "../model/chart";
 const priceController = new PriceController();
 const chartController = new ChartController();
 const bettingController = new BettingController();
+
 let high = 0;
 let low = 2;
 let open = 0;
@@ -43,6 +44,7 @@ export const PriceUpdate = async (who: boolean) => {
     }
 
     const chart = new Chart();
+    chart.id = (await chartController.lastid()) + 1;
     chart.symbol = symbol;
     chart.timestamp = timestamp;
 

@@ -10,12 +10,15 @@ import { AppDataSource } from "./data-source";
 
 import { BettingController } from "./controller/db/betting";
 import ArchwaySocket from "./ws/client";
+import { AccountController } from "./controller/db/account";
 
 AppDataSource.initialize()
   .then(async () => {
     // create express app
     const app = express();
     const port = 4000;
+    const accountController = new AccountController();
+    const bettingController = new BettingController();
 
     app.use(bodyParser.json());
     app.use(bodyParser.json());
@@ -32,17 +35,53 @@ AppDataSource.initialize()
       if (address == "" || !address.startsWith("archway1")) {
         res.status(404).send("Invalid address");
       }
-      const bettingController = new BettingController();
       const bettingList = await bettingController.UserBettingList(address);
-
       //만약 없다면 빈배열이 들어감
       res.status(200).send(bettingList);
     });
-
-    // app.use("/account", AccountRouter);
-    app.use("/", (req: Request, res: Response) => {
-      res.send("hello");
+    app.use("/deposit", async (req: Request, res: Response) => {
+      const { address, amount } = req.body;
+      if (address == "" || !address.startsWith("archway1")) {
+        res.status(404).send("Invalid address");
+      }
+      if (parseInt(amount) < 0) {
+        res.status(404).send("Invalid amount");
+      }
+      const account = await accountController.updateBalance(
+        address,
+        parseInt(amount),
+        "+"
+      );
+      res.status(200).send(account);
     });
+    app.use("/withdraw", async (req: Request, res: Response) => {
+      const { address, amount } = req.body;
+      if (address == "" || !address.startsWith("archway1")) {
+        res.status(404).send("Invalid address");
+      }
+      if (parseInt(amount) < 0) {
+        res.status(404).send("Invalid amount");
+      }
+      const account = await accountController.updateBalance(
+        address,
+        parseInt(amount),
+        "-"
+      );
+      res.status(200).send(account);
+    });
+    app.use("/bank", async (req: Request, res: Response) => {
+      const address = req.params.address;
+      const balance = (await accountController.getAccount(address)).balance;
+      const nowGame = await bettingController.NowBettingGame();
+      const nowGameTotal = nowGame.reduce((sum, cur) => {
+        return sum + cur.amount;
+      }, 0);
+      res.status(200).send({
+        balance,
+        nowGameTotal,
+      });
+    });
+
     app.listen(port);
 
     console.log(

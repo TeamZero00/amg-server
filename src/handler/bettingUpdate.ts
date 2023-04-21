@@ -31,7 +31,7 @@ export const BettingUpdate = async () => {
         win_amount,
       } = betting;
 
-      let account = await accountController.findAccount(address);
+      let account = await accountController.getAccount(address);
 
       if (!account) {
         const acc = new Account();

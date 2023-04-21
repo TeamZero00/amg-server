@@ -7,7 +7,7 @@ export class AccountController {
   async create(account: Account) {
     return await this.accountRepository.save(account);
   }
-  async findAccount(address: string): Promise<Account> {
+  async getAccount(address: string): Promise<Account> {
     const account = await this.accountRepository.findOne({
       where: { address },
     });
@@ -20,5 +20,26 @@ export class AccountController {
     });
     account.prizeAmount += winAmount;
     await this.accountRepository.save(account);
+  }
+
+  async updateBalance(address: string, amount: number, operator: string) {
+    const account = await this.accountRepository.findOne({
+      where: { address },
+    });
+    switch (operator) {
+      case "+":
+        account.balance += amount;
+        break;
+      case "-":
+        account.balance -= amount;
+        if (account.balance < 0) {
+          account.balance = 0;
+        }
+        break;
+      default:
+        break;
+    }
+
+    return await this.accountRepository.save(account);
   }
 }

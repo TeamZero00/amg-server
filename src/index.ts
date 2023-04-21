@@ -1,14 +1,12 @@
 import express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
-import { AppDataSource } from "./data-source";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import redis from "redis";
-import PriceRouter from "./router/price";
-import AccountRouter from "./router/account";
+
+import { AppDataSource } from "./data-source";
 
 import { BettingController } from "./controller/db/betting";
 import ArchwaySocket from "./ws/client";
@@ -28,6 +26,7 @@ AppDataSource.initialize()
     app.use(morgan("dev"));
     app.use(cookieParser());
 
+    // app.use("/deposit/:address");
     app.use("/bet_history/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
       if (address == "" || !address.startsWith("archway1")) {
@@ -40,7 +39,7 @@ AppDataSource.initialize()
       res.status(200).send(bettingList);
     });
 
-    app.use("/account", AccountRouter);
+    // app.use("/account", AccountRouter);
     app.use("/", (req: Request, res: Response) => {
       res.send("hello");
     });

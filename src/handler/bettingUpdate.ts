@@ -1,10 +1,8 @@
-import { setIntervalAsync } from "set-interval-async";
 import { getClient } from "../archway/client";
 import { AccountController } from "../controller/db/account";
 import { Account } from "../model/account";
 import { BettingController } from "../controller/db/betting";
 import { Betting } from "../model/betting";
-import { sendToAll } from "../ws/server";
 
 export const BettingUpdate = async () => {
   const client = await getClient();

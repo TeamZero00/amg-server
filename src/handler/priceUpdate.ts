@@ -1,4 +1,3 @@
-import { setIntervalAsync } from "set-interval-async";
 import { getUSDprice } from "../api/getPrice";
 
 import { PriceController } from "../controller/db/price";
@@ -8,14 +7,19 @@ import { getOwner } from "../archway/signer";
 import { Price } from "../model/price";
 import { BettingController } from "../controller/db/betting";
 import { sendToAll } from "../ws/server";
+import { Chart } from "../model/chart";
+
+const priceController = new PriceController();
+const chartController = new ChartController();
+const bettingController = new BettingController();
+let high = 0;
+let low = 2;
+let open = 0;
 
 export const PriceUpdate = async (who: boolean) => {
-  const priceController = new PriceController();
-  const chartController = new ChartController();
-  const bettingController = new BettingController();
-
   try {
     const { owner, owner2 } = await getOwner();
+
     const { price, symbol, date, timestamp, onTime } = await getUSDprice();
 
     let height: number, transactionHash: string;
@@ -37,8 +41,47 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
+
+    const chart = new Chart();
+    chart.symbol = symbol;
+    chart.timestamp = timestamp;
+
+    chart.date = new Date(date);
+    chart.open = open.toString();
+    chart.high = high.toString();
+    chart.low = low.toString();
+    if (parseFloat(price) > high) {
+      high = Number(price);
+      chart.high = price;
+    }
+
+    if (parseFloat(price) < low) {
+      low = Number(price);
+      chart.low = price;
+    }
+    chart.close = price;
+    sendToAll({
+      method: "new_chart",
+      data: {
+        chart,
+        price,
+      },
+    });
     console.log(winners);
-    if (winners.length >= 1) {
+
+    // console.log("timestamp: ", timestamp);
+    // console.log("height: ", height);
+    console.log("price: ", price);
+    console.log("roundPrice: ", roundPrice);
+    console.log("chart", chart.close);
+    sendToAll({
+      method: "new_chart",
+      data: {
+        chart,
+        price,
+      },
+    });
+    if (winners.length != 0) {
       sendToAll({
         method: "new_winners",
         data: {
@@ -48,9 +91,6 @@ export const PriceUpdate = async (who: boolean) => {
       });
     }
 
-    console.log("timestamp", timestamp);
-    console.log("height", height);
-    console.log("price", roundPrice);
     const priceData = new Price();
     priceData.symbol = symbol;
     priceData.timestamp = timestamp;
@@ -63,20 +103,12 @@ export const PriceUpdate = async (who: boolean) => {
     console.log("winners", winners);
     await bettingController.updateWinner(height, winners, roundPrice);
     await bettingController.updateLose(height, roundPrice);
+
     if (onTime) {
-      const recentPrices = await priceController.getRecentPrices();
-      const newChart = await chartController.makeChartByPrice(
-        recentPrices,
-        symbol,
-        timestamp,
-        date
-      );
-      const response = {
-        method: "new_chart",
-        data: newChart,
-      };
-      console.log("Send To All", response);
-      sendToAll(response);
+      await chartController.save(chart);
+      high = 0;
+      low = 2;
+      open = Number(chart.close);
     }
   } catch (err) {
     console.log(err);

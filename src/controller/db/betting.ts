@@ -1,9 +1,7 @@
-import { In, LessThan, Not } from "typeorm";
 import { AppDataSource } from "../../data-source";
 import { Betting, Status } from "../../model/betting";
 import { Winner } from "../../archway/signer";
 import { AccountController } from "./account";
-import { Account } from "../../model/account";
 
 export class BettingController {
   private bettingRepository = AppDataSource.getRepository(Betting);
@@ -93,11 +91,6 @@ export class BettingController {
 
   async UserBettingList(address: string) {
     try {
-      // const betting = await this.bettingRepository.find({
-      //   where: {
-      //     account: { address },
-      //   },
-      // });
       const BettingList = await this.bettingRepository
         .createQueryBuilder("betting")
         .leftJoinAndSelect("betting.account", "account")

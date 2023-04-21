@@ -1,7 +1,7 @@
-import { web3Config } from "../config.js";
 import { ArchwayClient } from "@archwayhq/arch3.js";
-import { network } from "./network.js";
-import { Pool } from "../types/types.js";
+import { network } from "./network";
+import { Pool } from "../types/types";
+import { web3Config } from "../config";
 
 type Betting = {
   address: string;

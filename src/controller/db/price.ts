@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../data-source";
-import { NextFunction, Request, Response } from "express";
+
 import { Price } from "../../model/price";
 import { SocketSendPrice } from "../../types/types";
 interface savePrice {

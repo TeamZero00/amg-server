@@ -13,4 +13,7 @@ export class Account {
   bettings: Betting[];
   @Column({ default: 0 })
   prizeAmount: number;
+
+  @Column({ default: 0 })
+  balance: number;
 }

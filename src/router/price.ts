@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   const chartController = new ChartController();
-  const recentChart = await chartController.recent();
+  const recentChart = await chartController.recentCharts();
   res.send(recentChart);
 });
 

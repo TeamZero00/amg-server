@@ -1,8 +1,8 @@
 import { SigningArchwayClient } from "@archwayhq/arch3.js";
 import { coin, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+
 import { GasPrice } from "@cosmjs/stargate";
 import { network } from "./network";
-import axios from "axios";
 import { web3Config } from "../config";
 export interface Winner {
   address: string;

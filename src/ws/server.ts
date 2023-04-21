@@ -21,7 +21,7 @@ wss.on("connection", async (ws) => {
   const sendData = {
     method: "init",
     data: {
-      chart: await chartController.recent(),
+      chart: await chartController.recentCharts(),
       game: await bettingController.recentBettingList(),
       poolBalance: (await client.getBankPool()).balance,
       price: await priceController.get24HourPrice(),

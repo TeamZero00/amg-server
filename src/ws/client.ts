@@ -18,6 +18,7 @@ const method = {
 const ws = new ReconnectingSocket(
   "wss://rpc.constantine-2.archway.tech/websocket"
 );
+const bettingController = new BettingController();
 let who = true;
 let lock = false;
 export default async function ArchwaySocket() {
@@ -52,7 +53,6 @@ export default async function ArchwaySocket() {
 
 let bettingList = [];
 const sendBettingList = async () => {
-  const bettingController = new BettingController();
   try {
     const newBettingLIst = await bettingController.recentBettingList();
     let isEqual = true;
@@ -80,12 +80,19 @@ const sendPool = async () => {
     const client = await getClient();
 
     const pool = await client.getBankPool();
+    const nowGame = await bettingController.NowBettingGame();
+    const nowGameTotal = nowGame.reduce((sum, cur) => {
+      return sum + cur.amount;
+    }, 0);
 
     if (Number(pool.balance) != poolBalance) {
       poolBalance = Number(pool.balance);
       const sendData = {
         method: "new_pool",
-        data: pool.balance,
+        data: {
+          balance: pool.balance,
+          nowGame: nowGameTotal,
+        },
       };
       sendToAll(sendData);
     }

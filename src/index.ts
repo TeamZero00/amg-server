@@ -83,6 +83,9 @@ AppDataSource.initialize()
     });
     app.use("/score", async (req: Request, res: Response) => {
       const { address } = req.body;
+      if (address == "" || !address.startsWith("archway1")) {
+        res.status(404).send("Invalid address");
+      }
       const account = await accountController.getAccount(address);
       const userPrize = account.prizeAmount;
       const rank = await accountController.getRank();

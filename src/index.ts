@@ -29,24 +29,14 @@ AppDataSource.initialize()
     app.use(morgan("dev"));
     app.use(cookieParser());
 
-    app.use("/bank/", async (req: Request, res: Response) => {
-      const address = req.params.address;
-      console.log(address);
+    app.use("/bank", async (req: Request, res: Response) => {
       const nowGame = await bettingController.NowBettingGame();
       const nowGameTotal = nowGame.reduce((sum, cur) => {
         return sum + cur.amount;
       }, 0);
-      const account = await accountController.getAccount(address);
-      console.log(account);
-      if (!account) {
-        return res.status(200).send({
-          nowGameTotal,
-        });
-      }
-      const balance = account.balance;
 
       res.status(200).send({
-        balance,
+        // balance,
         nowGameTotal,
       });
     });

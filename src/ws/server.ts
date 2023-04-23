@@ -18,12 +18,21 @@ const priceController = new PriceController();
 wss.on("connection", async (ws) => {
   console.log("client connected");
   const client = await getClient();
+  const pool = await client.getBankPool();
+  const nowGame = await bettingController.NowBettingGame();
+  const nowGameTotal = nowGame.reduce((sum, cur) => {
+    return sum + cur.amount;
+  }, 0);
   const sendData = {
     method: "init",
     data: {
       chart: await chartController.recentCharts(),
       game: await bettingController.recentBettingList(),
-      poolBalance: (await client.getBankPool()).balance,
+      pool: {
+        balance: pool.balance,
+        nowGame: nowGameTotal,
+      },
+
       price: await priceController.get24HourPrice(),
     },
   };

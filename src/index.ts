@@ -69,7 +69,7 @@ AppDataSource.initialize()
       );
       res.status(200).send(account);
     });
-    app.use("/bank", async (req: Request, res: Response) => {
+    app.use("/bank/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
       const balance = (await accountController.getAccount(address)).balance;
       const nowGame = await bettingController.NowBettingGame();

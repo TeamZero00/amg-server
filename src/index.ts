@@ -82,7 +82,7 @@ AppDataSource.initialize()
       });
     });
     app.use("/score", async (req: Request, res: Response) => {
-      const { address } = req.body;
+      const { address } = req.params;
       if (address == "" || !address.startsWith("archway1")) {
         res.status(404).send("Invalid address");
       }

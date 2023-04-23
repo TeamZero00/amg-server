@@ -29,6 +29,40 @@ AppDataSource.initialize()
     app.use(morgan("dev"));
     app.use(cookieParser());
 
+    app.use("/bank/:address", async (req: Request, res: Response) => {
+      const address = req.params.address;
+      console.log(address);
+      const account = await accountController.getAccount(address);
+      console.log(account);
+      if (account === null) {
+        return res.status(200).send({});
+      }
+      const balance = account.balance;
+      const nowGame = await bettingController.NowBettingGame();
+      const nowGameTotal = nowGame.reduce((sum, cur) => {
+        return sum + cur.amount;
+      }, 0);
+      res.status(200).send({
+        balance,
+        nowGameTotal,
+      });
+    });
+    app.use("/score/:address", async (req: Request, res: Response) => {
+      const address = req.params.address;
+      if (address == "" || !address.startsWith("archway1")) {
+        res.status(404).send("Invalid address");
+      }
+      const account = await accountController.getAccount(address);
+      if (account === null) {
+        return res.status(200).send({});
+      }
+      const userPrize = account.prizeAmount;
+      const rank = await accountController.getRank();
+      res.status(200).send({
+        userPrize,
+        rank,
+      });
+    });
     // app.use("/deposit/:address");
     app.use("/bet_history/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
@@ -69,31 +103,7 @@ AppDataSource.initialize()
       );
       res.status(200).send(account);
     });
-    app.use("/bank/:address", async (req: Request, res: Response) => {
-      const address = req.params.address;
-      const balance = (await accountController.getAccount(address)).balance;
-      const nowGame = await bettingController.NowBettingGame();
-      const nowGameTotal = nowGame.reduce((sum, cur) => {
-        return sum + cur.amount;
-      }, 0);
-      res.status(200).send({
-        balance,
-        nowGameTotal,
-      });
-    });
-    app.use("/score/:address", async (req: Request, res: Response) => {
-      const { address } = req.params;
-      if (address == "" || !address.startsWith("archway1")) {
-        res.status(404).send("Invalid address");
-      }
-      const account = await accountController.getAccount(address);
-      const userPrize = account.prizeAmount;
-      const rank = await accountController.getRank();
-      res.status(200).send({
-        userPrize,
-        rank,
-      });
-    });
+
     app.listen(port);
 
     console.log(

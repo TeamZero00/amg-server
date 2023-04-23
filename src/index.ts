@@ -81,7 +81,16 @@ AppDataSource.initialize()
         nowGameTotal,
       });
     });
-
+    app.use("/score", async (req: Request, res: Response) => {
+      const { address } = req.body;
+      const account = await accountController.getAccount(address);
+      const userPrize = account.prizeAmount;
+      const rank = await accountController.getRank();
+      res.status(200).send({
+        userPrize,
+        rank,
+      });
+    });
     app.listen(port);
 
     console.log(

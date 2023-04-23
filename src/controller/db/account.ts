@@ -42,4 +42,20 @@ export class AccountController {
 
     return await this.accountRepository.save(account);
   }
+  async getRank() {
+    const accountRank = await this.accountRepository
+      .createQueryBuilder("account")
+      .orderBy("account.prizeAmount", "DESC")
+      .limit(10)
+      .getMany();
+    const rank = accountRank.map((account, index) => {
+      const { address, prizeAmount } = account;
+      return {
+        id: index,
+        address,
+        prizeAmount,
+      };
+    });
+    return rank;
+  }
 }

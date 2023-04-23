@@ -81,7 +81,7 @@ AppDataSource.initialize()
         nowGameTotal,
       });
     });
-    app.use("/score", async (req: Request, res: Response) => {
+    app.use("/score/:address", async (req: Request, res: Response) => {
       const { address } = req.params;
       if (address == "" || !address.startsWith("archway1")) {
         res.status(404).send("Invalid address");

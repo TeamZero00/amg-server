@@ -8,8 +8,7 @@ const rest = restClient(PolyGonConfig.apiKey);
 //   return seconds === 0;
 // }
 function checkOnTime(time: number, compare: number): boolean {
-  const minutes = new Date(time).getMinutes();
-  return time === compare;
+  return time !== compare;
 }
 function makeDate() {
   const dateObj = new Date();
@@ -36,6 +35,7 @@ export async function getUSDprice() {
 
     const { timestamp, date } = makeDate();
     const onTime = checkOnTime(timestamp, compare);
+    console.log(timestamp, compare, onTime);
     compare = timestamp;
     return {
       price: converted.toString(),

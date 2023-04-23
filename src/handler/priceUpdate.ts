@@ -65,11 +65,18 @@ export const PriceUpdate = async (who: boolean) => {
       method: "new_chart",
       data: chart,
     });
+    console.log(winners);
 
     console.log("timestamp: ", timestamp);
     console.log("height: ", height);
     console.log("price: ", price);
 
+    const sendData = {
+      method: "new_chart",
+      data: chart,
+    };
+    console.log(sendData);
+    sendToAll(sendData);
     if (winners.length != 0) {
       sendToAll({
         method: "new_winners",

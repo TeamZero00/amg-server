@@ -74,19 +74,18 @@ const sendBettingList = async () => {
   }
 };
 
-let poolBalance = 0;
+let poolBalance = "0";
 const sendPool = async () => {
   try {
     const client = await getClient();
-
     const pool = await client.getBankPool();
     const nowGame = await bettingController.NowBettingGame();
     const nowGameTotal = nowGame.reduce((sum, cur) => {
       return sum + cur.amount;
     }, 0);
 
-    if (Number(pool.balance) != poolBalance) {
-      poolBalance = Number(pool.balance);
+    if (pool.balance !== poolBalance) {
+      poolBalance = pool.balance;
       const sendData = {
         method: "new_pool",
         data: {
@@ -96,6 +95,7 @@ const sendPool = async () => {
       };
       sendToAll(sendData);
     }
+    poolBalance = pool.balance;
   } catch (err) {
     console.log(err);
   }

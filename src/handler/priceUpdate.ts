@@ -41,42 +41,35 @@ export const PriceUpdate = async (who: boolean) => {
       default:
         break;
     }
-    // const { id, open } = await chartController.lastidAndClose();
-    // const chart = new Chart();
-    // chart.id = id + 1;
-    // chart.symbol = symbol;
-    // chart.timestamp = timestamp;
+    const { id, open } = await chartController.lastidAndClose();
+    const chart = new Chart();
+    chart.id = id + 1;
+    chart.symbol = symbol;
+    chart.timestamp = timestamp;
 
-    // chart.date = date;
-    // chart.open = open;
-    // chart.high = high.toString();
-    // chart.low = low.toString();
-    // if (parseFloat(price) > high) {
-    //   high = Number(price);
-    //   chart.high = price;
-    // }
+    chart.date = date;
+    chart.open = open;
+    chart.high = high.toString();
+    chart.low = low.toString();
+    if (parseFloat(price) > high) {
+      high = Number(price);
+      chart.high = price;
+    }
 
-    // if (parseFloat(price) < low) {
-    //   low = Number(price);
-    //   chart.low = price;
-    // }
-    // chart.close = price;
-    // sendToAll({
-    //   method: "new_chart",
-    //   data: chart,
-    // });
-    // console.log(winners);
+    if (parseFloat(price) < low) {
+      low = Number(price);
+      chart.low = price;
+    }
+    chart.close = price;
+    sendToAll({
+      method: "new_chart",
+      data: chart,
+    });
 
-    // console.log("timestamp: ", timestamp);
-    // console.log("height: ", height);
-    // console.log("price: ", price);
+    console.log("timestamp: ", timestamp);
+    console.log("height: ", height);
+    console.log("price: ", price);
 
-    // const sendData = {
-    //   method: "new_chart",
-    //   data: chart,
-    // };
-    // console.log(sendData);
-    // sendToAll(sendData);
     if (winners.length != 0) {
       sendToAll({
         method: "new_winners",
@@ -101,20 +94,20 @@ export const PriceUpdate = async (who: boolean) => {
     await bettingController.updateLose(height, roundPrice);
 
     if (onTime) {
-      // await chartController.save(chart);
-      // high = 0;
-      // low = 2;
-      const prices = await priceController.getRecentPrices();
-      const chart = chartController.makeChartByPrice(
-        prices,
-        symbol,
-        timestamp,
-        date
-      );
-      sendToAll({
-        method: "new_chart",
-        data: chart,
-      });
+      await chartController.save(chart);
+      high = 0;
+      low = 2;
+      // const prices = await priceController.getRecentPrices();
+      // const chart = chartController.makeChartByPrice(
+      //   prices,
+      //   symbol,
+      //   timestamp,
+      //   date
+      // );
+      // sendToAll({
+      //   method: "new_chart",
+      //   data: chart,
+      // });
     }
   } catch (err) {
     console.log(err);

@@ -67,7 +67,7 @@ AppDataSource.initialize()
       res.status(200).send(bettingList);
     });
     app.use("/deposit", async (req: Request, res: Response) => {
-      const { address, amount } = req.body;
+      const { address, amount }: { address: string; amount: string } = req.body;
       if (address == "" || !address.startsWith("archway1")) {
         res.status(404).send("Invalid address");
       }
@@ -82,7 +82,7 @@ AppDataSource.initialize()
       res.status(200).send(account);
     });
     app.use("/withdraw", async (req: Request, res: Response) => {
-      const { address, amount } = req.body;
+      const { address, amount }: { address: string; amount: string } = req.body;
       if (address == "" || !address.startsWith("archway1")) {
         res.status(404).send("Invalid address");
       }

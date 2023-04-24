@@ -71,7 +71,8 @@ export const PriceUpdate = async (who: boolean) => {
     if (chart.timestamp !== cacheChart.timestamp) {
       high = 0;
       low = 2;
-      await chartController.save(cacheChart);
+      chart.id = chart.id + 1;
+      await chartController.save(chart);
     }
 
     cacheChart = {

@@ -99,12 +99,12 @@ export const PriceUpdate = async (who: boolean) => {
     console.log("winners", winners);
     await bettingController.updateWinner(height, winners, roundPrice);
     await bettingController.updateLose(height, roundPrice);
-    cacheChart = chart;
-    if (JSON.stringify(cacheChart) !== JSON.stringify(chart)) {
+    if (cacheChart.timestamp !== chart.timestamp) {
       await chartController.save(cacheChart);
       high = 0;
       low = 2;
     }
+    cacheChart = chart;
   } catch (err) {
     console.log(err);
   }

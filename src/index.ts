@@ -29,17 +29,7 @@ AppDataSource.initialize()
     app.use(morgan("dev"));
     app.use(cookieParser());
 
-    app.use("/bank", async (req: Request, res: Response) => {
-      const nowGame = await bettingController.NowBettingGame();
-      const nowGameTotal = nowGame.reduce((sum, cur) => {
-        return sum + cur.amount;
-      }, 0);
-
-      res.status(200).send({
-        // balance,
-        nowGameTotal,
-      });
-    });
+ 
     app.use("/score/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
       if (address == "" || !address.startsWith("archway1")) {

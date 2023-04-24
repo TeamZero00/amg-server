@@ -72,7 +72,7 @@ export const PriceUpdate = async (who: boolean) => {
       high = 0;
       low = 2;
       chart.id = chart.id + 1;
-      await chartController.save(chart);
+      await chartController.save(cacheChart);
     }
 
     cacheChart = {

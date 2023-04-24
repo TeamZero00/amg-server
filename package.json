@@ -25,6 +25,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
     "helmet": "^6.0.1",
+    "https": "^1.0.0",
     "investing-com-api": "^4.3.3",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

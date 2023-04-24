@@ -17,6 +17,9 @@ export class ChartController {
       .createQueryBuilder("chart")
       .orderBy("id", "DESC")
       .getOne();
+    if (!recentChart) {
+      return { id: 0, open: "0" };
+    }
     return { id: recentChart.id, open: recentChart.close };
   }
   async recentCharts(): Promise<Chart[]> {

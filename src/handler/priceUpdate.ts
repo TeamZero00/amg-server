@@ -44,13 +44,9 @@ export const PriceUpdate = async (who: boolean) => {
     const { id, open } = await chartController.lastidAndClose();
     const chart = new Chart();
 
-    if (!id || !open) {
-      chart.id = 1;
-      chart.open = "0";
-    } else {
-      chart.id = id + 1;
-      chart.open = open;
-    }
+    chart.id = id + 1;
+    chart.open = open;
+
     chart.symbol = symbol;
     chart.timestamp = timestamp;
 

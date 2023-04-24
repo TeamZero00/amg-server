@@ -35,7 +35,7 @@ export async function getUSDprice() {
 
     const { timestamp, date } = makeDate();
     const onTime = checkOnTime(timestamp, compare);
-    console.log(timestamp, compare, onTime);
+
     compare = timestamp;
     return {
       price: converted.toString(),

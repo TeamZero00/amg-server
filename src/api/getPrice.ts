@@ -22,7 +22,7 @@ function makeDate() {
   return { date, timestamp };
 }
 
-let compare;
+let compare = 0;
 export async function getUSDprice() {
   console.log("get price!");
   const from = "EUR";

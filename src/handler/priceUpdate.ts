@@ -15,7 +15,7 @@ const bettingController = new BettingController();
 
 let high = 0;
 let low = 2;
-let cacheChart;
+let cacheChart = undefined;
 export const PriceUpdate = async (who: boolean) => {
   try {
     const { owner, owner2 } = await getOwner();
@@ -61,22 +61,36 @@ export const PriceUpdate = async (who: boolean) => {
       chart.low = price;
     }
     chart.close = price;
+    if (!cacheChart) {
+      console.log("!", cacheChart);
+      cacheChart = {
+        ...chart,
+      };
+    }
+
+    if (chart.timestamp !== cacheChart.timestamp) {
+      console.log(chart);
+      high = 0;
+      low = 2;
+      await chartController.save(cacheChart);
+    }
+
+    cacheChart = {
+      ...chart,
+    };
+
     sendToAll({
       method: "new_chart",
       data: chart,
     });
-    console.log(winners);
+    // console.log(winners);
 
-    console.log("timestamp: ", timestamp);
-    console.log("height: ", height);
-    console.log("price: ", price);
+    // console.log("timestamp: ", timestamp);
+    // console.log("height: ", height);
+    // console.log("price: ", price);
 
-    const sendData = {
-      method: "new_chart",
-      data: chart,
-    };
-    console.log(sendData);
-    sendToAll(sendData);
+    // console.log(sendData);
+
     if (winners.length != 0) {
       sendToAll({
         method: "new_winners",
@@ -99,12 +113,6 @@ export const PriceUpdate = async (who: boolean) => {
     console.log("winners", winners);
     await bettingController.updateWinner(height, winners, roundPrice);
     await bettingController.updateLose(height, roundPrice);
-    if (cacheChart.timestamp !== chart.timestamp) {
-      await chartController.save(cacheChart);
-      high = 0;
-      low = 2;
-    }
-    cacheChart = chart;
   } catch (err) {
     console.log(err);
   }

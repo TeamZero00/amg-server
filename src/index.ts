@@ -45,18 +45,23 @@ AppDataSource.initialize()
         rank,
       });
     });
-    // app.use("/deposit/:address");
+
     app.use("/balance/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
       if (address == "" || !address.startsWith("archway1")) {
-        res.status(404).send("Invalid address");
+        return res.status(404).send("Invalid address");
       }
       const account = await accountController.getAccount(address);
+      if (!account) {
+        return res.status(200).send({
+          balance: 0,
+        });
+      }
       res.status(200).send({
         balance: account.balance,
       });
-      //만약 없다면 빈배열이 들어감
     });
+
     app.use("/bet_history/:address", async (req: Request, res: Response) => {
       const address = req.params.address;
       if (address == "" || !address.startsWith("archway1")) {
@@ -66,6 +71,7 @@ AppDataSource.initialize()
       //만약 없다면 빈배열이 들어감
       res.status(200).send(bettingList);
     });
+
     app.use("/deposit", async (req: Request, res: Response) => {
       const { address, amount }: { address: string; amount: string } = req.body;
       if (address == "" || !address.startsWith("archway1")) {
